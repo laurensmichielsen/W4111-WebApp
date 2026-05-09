@@ -102,8 +102,7 @@ class MySQLDataService(AbstractBaseDataService):
         self.connection.commit()
 
         # return primary key if available
-        return self.cursor.lastrowid
-
+        return values
 
     # if PK exists: 1
     # else 0
@@ -129,7 +128,7 @@ class MySQLDataService(AbstractBaseDataService):
         self.connection.commit()
 
         print("Rows updated:", self.cursor.rowcount)
-        return self.cursor.rowcount
+        return 1
 
     def deleteByPrimaryKey(self, primary_key: dict) -> int:
         row_key = self.retrieveByPrimaryKey(primary_key)

@@ -46,11 +46,7 @@ class OrderDetailsResource(AbstractBaseResource):
     def post(self, new_data: OrderDetails) -> dict:
         data = new_data.model_dump()
         dictionary = {self.orderNumber : data["orderNumber"], self.productCode : data["productCode"]}
-        self.service.create(data, dictionary)
-        return {
-            "orderNumber": data["orderNumber"],
-            "productCode": data["productCode"]
-        }
+        return self.service.create(data, dictionary)
 
     def put(self, orderNumber: int, productCode: str, new_data: OrderDetails) -> int:
         input_dict = {self.orderNumber : orderNumber, self.productCode : productCode}

@@ -174,7 +174,7 @@ def get_orderdetails(
     return order_details_resource.get(template_dict)
 
 @app.post("/customers", tags=["customers"])
-def create_customer(new_data: Customer) -> int:
+def create_customer(new_data: Customer):
     try:
         new_id = customer_resource.post(new_data)
         return new_id
@@ -183,7 +183,7 @@ def create_customer(new_data: Customer) -> int:
 
 
 @app.post("/orders", tags=["orders"])
-def create_orders(new_data: Order) -> int:
+def create_orders(new_data: Order):
     try:
         new_id = order_resource.post(new_data)
         return new_id
