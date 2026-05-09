@@ -8,6 +8,7 @@ from datetime import date
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+
 if __package__ in (None, ""):
     # Supports running this file directly (e.g., PyCharm "main.py" debug config).
     sys.path.append(str(Path(__file__).resolve().parents[1]))
@@ -88,6 +89,8 @@ def health() -> dict[str, str]:
 @app.post("/echo", tags=["echo"])
 def echo(payload: EchoRequest) -> EchoRequest:
     return payload
+
+# TODO: check codes and handle DB errors
 
 @app.get("/customers", tags=["customers"])
 def get_customer(

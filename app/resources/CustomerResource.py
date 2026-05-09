@@ -54,7 +54,7 @@ class CustomerResource(AbstractBaseResource):
         customer_number = data.get(self.primary_key_field)
         if customer_number is None or customer_number == 0:
             raise ValueError("Customer Number should be defined")
-        return self.service.create(data)
+        return self.service.create(data, {self.primary_key_field : customer_number})
 
     
     def delete(self, id: int) -> int:

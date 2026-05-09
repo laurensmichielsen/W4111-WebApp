@@ -50,7 +50,7 @@ class OrderResource(AbstractBaseResource):
         order_number = data.get("orderNumber")
         if order_number is None or order_number == 0:
             raise ValueError("Order Number should be defined")
-        return self.service.create(data)
+        return self.service.create(data, {self.primary_key_field : data.get(self.primary_key_field)})
 
     
     def delete(self, id: int) -> int:

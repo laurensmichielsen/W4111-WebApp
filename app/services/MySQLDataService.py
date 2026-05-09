@@ -79,9 +79,14 @@ class MySQLDataService(AbstractBaseDataService):
         self.cursor.execute(query, tuple(template.values()))
         return self.cursor.fetchall()
 
-    def create(self, payload: dict) -> int:
+    # TODO: check if pk already exists
+    def create(self, payload: dict, primary_key: dict) -> int:
         if not payload:
             return None
+        
+        row_key = self.retrieveByPrimaryKey(primary_key)
+        if row_key:
+            raise ValueError("Record with key does already exist")
 
         columns = ", ".join(payload.keys())
         placeholders = ", ".join(["%s"] * len(payload))
@@ -100,10 +105,15 @@ class MySQLDataService(AbstractBaseDataService):
         return self.cursor.lastrowid
 
 
+    # if PK exists: 1
+    # else 0
     def updateByPrimaryKey(self, primary_key: dict, payload: dict) -> int:
         if not payload:
             return 0
-
+        row_key = self.retrieveByPrimaryKey(primary_key)
+        if not row_key:
+            return 0
+        
         set_clause = ", ".join([f"{key} = %s" for key in payload.keys()])
         where_clause, key_values = self._build_where_clause(primary_key)
 
@@ -122,6 +132,9 @@ class MySQLDataService(AbstractBaseDataService):
         return self.cursor.rowcount
 
     def deleteByPrimaryKey(self, primary_key: dict) -> int:
+        row_key = self.retrieveByPrimaryKey(primary_key)
+        if not row_key:
+            raise ValueError("Record with key does not exist")
         where_clause, values = self._build_where_clause(primary_key)
         query = f"""
             DELETE FROM {self.table}
